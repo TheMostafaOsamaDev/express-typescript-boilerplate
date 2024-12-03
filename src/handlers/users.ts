@@ -19,7 +19,6 @@ export function createUser(
   res: Response<SendCreatedUserDto>
 ) {
   const { username, email, password } = req.body;
-  const { logInAfterCreate } = req.query;
 
   res.status(201).send({
     id: 1,
