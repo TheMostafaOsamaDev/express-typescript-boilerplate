@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CreateUserDto } from "../dtos/CreateUser.dto";
 import { CreateUserParams } from "../types/query.params";
+import { SendCreatedUserDto } from "../dtos/SendCreatedUser.dto";
 
 // GET /api/users
 export function getUsers(req: Request, res: Response) {
@@ -15,18 +16,14 @@ export function getUserById(req: Request, res: Response) {
 // POST /api/users
 export function createUser(
   req: Request<{}, {}, CreateUserDto, CreateUserParams>,
-  res: Response
+  res: Response<SendCreatedUserDto>
 ) {
   const { username, email, password } = req.body;
   const { logInAfterCreate } = req.query;
 
-  res.send({
-    message: "User created successfully",
-    data: {
-      username,
-      email,
-      password,
-      logInAfterCreate,
-    },
+  res.status(201).send({
+    id: 1,
+    email,
+    username,
   });
 }
