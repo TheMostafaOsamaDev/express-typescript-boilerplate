@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateUserDto } from "../dtos/CreateUser.dto";
+import { CreateUserDto } from "../dtos/CreateUser.dto.old";
 import { CreateUserParams } from "../types/query.params";
 import { SendCreatedUserDto } from "../dtos/SendCreatedUser.dto";
 

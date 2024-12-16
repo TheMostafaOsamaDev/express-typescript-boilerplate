@@ -1,14 +1,29 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { ErrorRequestHandler } from "express";
+import { getUrl, PORT } from "./constants";
+import { connectDB } from "./lib/db";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
-// Routes
-import userRouter from "./routes/users";
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use("/api/users", userRouter);
+// API Routes
+import authRoutes from "./routes/auth.route";
+import { errorHandler } from "./lib/util";
 
-const PORT = process.env.PORT || 8080;
+app.get(getUrl("/"), (req, res) => {
+  res.send("Hello World");
+});
 
-app.listen(PORT, () =>
-  console.log(`\nExpress & Typescript server running on port: ${PORT}\n`)
-);
+app.use(getUrl("/auth"), authRoutes);
+
+// Error handler
+app.use(errorHandler);
+
+// Connect to the database
+connectDB().then(() => {
+  app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+});
