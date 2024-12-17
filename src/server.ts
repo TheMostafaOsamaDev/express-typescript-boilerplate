@@ -11,16 +11,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // API Routes
-import authRoutes from "./routes/auth.route";
-import { errorHandler } from "./lib/util";
+import authRoute from "./routes/auth.route";
+import messageRoute from "./routes/message.route";
 
-app.get(getUrl("/"), (req, res) => {
-  res.send("Hello World");
-});
-
-app.use(getUrl("/auth"), authRoutes);
+app.use(getUrl("/auth"), authRoute);
+app.use(getUrl("/message"), messageRoute);
 
 // Error handler
+import { errorHandler } from "./lib/util";
 app.use(errorHandler);
 
 // Connect to the database
