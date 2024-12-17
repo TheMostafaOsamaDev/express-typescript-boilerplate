@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model";
+import { User, UserType } from "../models/user.model";
 import { AsyncRouteHandler } from "../types";
 import { JWT_SECRET } from "../constants";
 
@@ -22,14 +22,17 @@ export const isAuthedMiddleware: AsyncRouteHandler = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email: decoded.user.email }).select(
-      "-password"
+      "-password -createdAt -updatedAt"
     );
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    req.user = user;
+    req.user = {
+      ...user.toJSON(),
+      _id: user._id.toString(),
+    };
 
     next();
   } catch (error) {

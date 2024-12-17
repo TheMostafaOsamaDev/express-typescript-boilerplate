@@ -1,7 +1,7 @@
 // Async Handler Type
 import { Request, Response, NextFunction } from "express";
 
-export type AsyncRouteHandler<B = undefined, P = any, Q = any> = (
+export type AsyncRouteHandler<B = undefined | any, P = any, Q = any> = (
   req: Request<P, any, B, Q>,
   res: Response,
   next: NextFunction

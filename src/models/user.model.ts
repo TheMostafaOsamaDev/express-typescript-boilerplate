@@ -24,6 +24,6 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export type UserType = InferSchemaType<typeof userSchema>;
+export type UserType = InferSchemaType<typeof userSchema> & { _id: string };
 
 export const User = model("User", userSchema);

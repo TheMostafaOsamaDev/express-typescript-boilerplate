@@ -4,6 +4,8 @@ import { CreateUserDto } from "../dtos/CreateUser.dto";
 import * as bcrypt from "bcryptjs";
 import { generateToken } from "../lib/util";
 import { LogInUserDto } from "../dtos/LogInUser.dto";
+import { cloudinary } from "../lib/cloudinary";
+import { UpdateProfileDto } from "../dtos/UpdateProfile.dto";
 
 export const signUp: AsyncRouteHandler<CreateUserDto> = async (
   req,
@@ -111,7 +113,29 @@ export const logOut: AsyncRouteHandler = async (req, res, next) => {
   }
 };
 
-export const updateProfile: AsyncRouteHandler = async (req, res, next) => {
+export const updateProfile: AsyncRouteHandler<UpdateProfileDto> = async (
+  req,
+  res,
+  next
+) => {
   try {
-  } catch (error) {}
+    const { profilePic } = req.body;
+
+    const userId = req.user._id;
+
+    const upload = await cloudinary.uploader.upload(profilePic);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: upload.secure_url },
+      { new: true }
+    ).select("-password");
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
